@@ -544,7 +544,7 @@
       <div><div class="stat-n">8</div><div class="stat-l">Full Baths</div></div>
       <div><div class="stat-n">3</div><div class="stat-l">Half Baths</div></div>
       <div><div class="stat-n">10,764</div><div class="stat-l">Sq Ft · 1,001 m²</div></div>
-      <div><div class="stat-n">14</div><div class="stat-l">Wongs 🎉</div></div>
+      <div onclick="openWongsModal()" style="cursor:pointer;"><div class="stat-n">14</div><div class="stat-l">Wongs 🎉</div></div>
       <div><div class="stat-n">40 min</div><div class="stat-l">From Airport</div></div>
     </div>
   </div>
@@ -1146,6 +1146,26 @@
 </div>
 
 
+<!-- WONGS MODAL -->
+<div class="modal-overlay" id="wongs-modal" onclick="if(event.target.id==='wongs-modal') closeWongsModal()">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal-close" onclick="closeWongsModal()">✕</button>
+    <div class="modal-title">The 14 Wongs 🎉</div>
+    <div class="modal-sub">March 1–8, 2027 · Lo Barnechea</div>
+    <div class="modal-divider"></div>
+    <ol style="list-style:none; display:flex; flex-direction:column; gap:.85rem; padding:0;">
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">1</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">June + Sung</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">2</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Jord + Tijana</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">3</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Lily + Leif</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">4</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Steve + Jo</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">5</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Jack + Liza</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">6</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Tom + Merd</span></li>
+      <li style="display:flex; align-items:center; gap:.9rem;"><span style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--fuchsia); opacity:.5; width:1.4rem; flex-shrink:0;">7</span><span style="font-size:.95rem; font-weight:500; color:var(--text);">Chris + Heather</span></li>
+    </ol>
+  </div>
+</div>
+
+
 <!-- FOOTER -->
 <div class="footer">
   <p>Wong Family Adventure · Lo Barnechea, Santiago, Chile · March 1–8, 2027 🏔️</p>
@@ -1610,6 +1630,10 @@
       document.getElementById('r-price').value = '';
     }, 3200);
   }
+
+  function openWongsModal() { document.getElementById('wongs-modal').classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeWongsModal() { document.getElementById('wongs-modal').classList.remove('open'); document.body.style.overflow=''; }
+
 
 </script>
 </body>
