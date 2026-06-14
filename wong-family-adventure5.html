@@ -1272,6 +1272,7 @@
       <div class="modal-sub">Share a find with the family</div>
       <div class="modal-divider"></div>
       <div class="ff"><label>Restaurant Name *</label><input type="text" id="r-name" placeholder="e.g. El Otro Sitio"/></div>
+      <button type="button" id="r-research-btn" onclick="researchRestaurant()" style="width:100%; background:var(--travertine); color:var(--text); border:none; border-radius:2px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; padding:.7rem; cursor:pointer; margin-bottom:1.2rem;">✨ Auto-fill with AI</button>
       <div class="ff-row">
         <div class="ff"><label>Cuisine / Vibe</label><input type="text" id="r-cuisine" placeholder="e.g. Seafood · Bellavista"/></div>
         <div class="ff"><label>Price Range</label>
@@ -1596,6 +1597,44 @@
   }
   function handleRestOverlayClick(e) {
     if (e.target.id === 'rest-modal') closeRestModal();
+  }
+
+  async function researchRestaurant() {
+    const name = document.getElementById('r-name').value.trim();
+    if (!name) { alert("Type a restaurant name first and I'll fill in the rest \ud83d\ude0a"); return; }
+    const btn = document.getElementById('r-research-btn');
+    const orig = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Researching ' + name + '\u2026';
+    try {
+      const prompt = `You are helping a family fill in a restaurant suggestion for a trip to Santiago / Lo Barnechea, Chile (March 2027).\n\nThe restaurant is: "${name}"\n\nRespond with ONLY a valid JSON object (no markdown, no backticks), exactly this structure:\n{\n  "cuisine": "short cuisine + neighbourhood tag, e.g. 'Seafood \u00b7 Bellavista'",\n  "price": "your best estimate, exactly one of: $ or $$ or $$$ or $$$$",\n  "desc": "2-3 warm, enthusiastic sentences: what makes it special, the dish to order, a practical tip. Max 55 words.",\n  "photo": "a working Unsplash photo URL matching this cuisine, format https://images.unsplash.com/photo-XXXXXXXXXXXXXXXXXX?w=600&q=80. If unsure use https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80"\n}`;
+
+      const response = await fetch('https://wong-anthropic-proxy.jcitizen.workers.dev', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
+      });
+      const data = await response.json();
+      const text = data.content.map(b => b.text || '').join('').trim();
+      const result = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+      if (result.cuisine) document.getElementById('r-cuisine').value = result.cuisine;
+      if (result.desc)    document.getElementById('r-desc').value = result.desc;
+      if (result.photo)   document.getElementById('r-photo').value = result.photo;
+      if (result.price) {
+        const sym = result.price.trim().split(' ')[0];
+        const sel = document.getElementById('r-price');
+        for (const opt of sel.options) {
+          if (opt.text.split(' ')[0] === sym) { sel.value = opt.value; break; }
+        }
+      }
+    } catch(err) {
+      alert('Could not research that one \u2014 just fill it in manually \ud83d\ude0a');
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = orig;
+    }
   }
 
   function submitRestaurant() {
