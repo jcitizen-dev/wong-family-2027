@@ -1459,7 +1459,6 @@
   });
 
   // ── ACTIVITIES (AI-powered + Firebase) ───────────────────────
-  const ANTHROPIC_KEY = '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';
   let pendingActivity = null;
 
   function renderUserActs(data) {
@@ -1519,17 +1518,10 @@
     try {
       const prompt = `You are writing content for a family trip website for a family visiting Lo Barnechea, Santiago, Chile March 1-8 2027.\n\nA family member has suggested the activity: "${name}"\n\nRespond with ONLY a valid JSON object (no markdown, no backticks), exactly this structure:\n{\n  "name": "full activity name with any relevant emoji prefix",\n  "tag": "short location or type tag, e.g. 'Caj\u00f3n del Maipo' or 'Day Trip \u00b7 ~1hr'",\n  "desc": "2-3 sentence description of this activity as it relates to the Santiago/Lo Barnechea area. Mention what makes it special, what to expect, practical tip. Max 60 words. Warm, enthusiastic tone.",\n  "photo": "a working unsplash photo URL that matches this activity, format: https://images.unsplash.com/photo-XXXXXXXXXXXXXXXXXX?w=600&q=80"\n}\n\nFor the photo, use only well-known Unsplash IDs you are highly confident are correct and match the activity visually. If unsure, use https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80 as a safe mountain landscape fallback.`;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('https://wong-anthropic-proxy.jcitizen.workers.dev', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
-          max_tokens: 1000,
           messages: [{ role: 'user', content: prompt }]
         })
       });
